@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { ModeSwitcher } from "@/components/mode-switcher"
 export function SiteHeader() {
     return (

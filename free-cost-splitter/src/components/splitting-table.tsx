@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/table"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
 import { PlusCircleIcon } from "lucide-react"
-import { SiteHeader } from "@/components/side-header"
 import { SelectGroup } from '@/components/ui/select';
 
 interface TableRow {
@@ -114,6 +113,34 @@ export default function SplittingTable() {
     )
   }
 
+  const handleAddRow = () => {
+    // Get the highest existing ID and add 1
+    const newId = Math.max(...tableRows.map(row => row.id), 0) + 1
+
+    // Create cost splitting map for all existing payers
+    const newCostSplitting = new Map(
+      payers.map(payer => [payer.id, 0])
+    )
+
+    const newRow: TableRow = {
+      id: newId,
+      costname: "",
+      amount: 0,
+      payedBy: payers[0]?.id || 1, // Default to first payer
+      costSplitting: newCostSplitting
+    }
+
+    setTableRows(prevRows => [...prevRows, newRow])
+
+    // Set focus to the cost name input of the new row
+    setTimeout(() => {
+      const newRowInput = document.querySelector(`input[data-row-id="${newId}"]`)
+      if (newRowInput instanceof HTMLInputElement) {
+        newRowInput.focus()
+      }
+    }, 0)
+  }
+
   return (
     <Table className="w-auto justify-self-center">
       <TableCaption>Add your costs and split them with your friends</TableCaption>
@@ -126,7 +153,7 @@ export default function SplittingTable() {
             <TableHead className="w-fit" key={payer.id}>{payer.name}</TableHead>
           ))}
           <TableHead className="w-fit">
-            <Button variant="outline" size="icon"><PlusCircleIcon /></Button>
+            <Button aria-description='Add additional payer' variant="outline" size="icon"><PlusCircleIcon /></Button>
           </TableHead>
         </TableRow>
       </TableHeader>
@@ -139,6 +166,7 @@ export default function SplittingTable() {
                 placeholder="Cost Name"
                 value={row.costname}
                 onChange={(e) => handleCostNameChange(row.id, e.target.value)}
+                data-row-id={row.id}
               />
             </TableCell>
             <TableCell className="w-fit">
@@ -181,11 +209,20 @@ export default function SplittingTable() {
         ))}
         <TableRow>
           <TableCell>
-            <Button variant="outline" size="icon"><PlusCircleIcon /></Button>
+            <Button
+              aria-description='Add a new cost'
+              variant="outline"
+              size="icon"
+              onClick={handleAddRow}
+            >
+              <PlusCircleIcon />
+            </Button>
           </TableCell>
           <TableCell></TableCell>
           <TableCell></TableCell>
-          <TableCell></TableCell>
+          {payers.map(payer => (
+            <TableCell key={payer.id}></TableCell>
+          ))}
         </TableRow>
       </TableBody>
     </Table>
