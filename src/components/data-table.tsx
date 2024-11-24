@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   Table,
@@ -7,21 +7,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import { Button } from "@/components/ui/button"
-import { PlusCircleIcon } from "lucide-react"
+} from '@tanstack/react-table';
+import { Button } from '@/components/ui/button';
+import { PlusCircleIcon } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  onAddRow: () => void
-  onAddPayer: () => void
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  onAddRow: () => void;
+  onAddPayer: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -34,34 +34,41 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
   return (
     <div className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>
-            {table.getHeaderGroups().map((headerGroup) => (
-              headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))
-            ))}
+            {table
+              .getHeaderGroups()
+              .map((headerGroup) =>
+                headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                )),
+              )}
             <TableHead>
-              <Button
-                aria-description='Add additional payer'
-                variant="outline"
-                size="icon"
-                onClick={onAddPayer}
-              >
-                <PlusCircleIcon />
-              </Button>
+              <div className="space-y-2 min-w-30 h-full">
+                <div className="flex items-center justify-center h-1/2">
+                  <Button
+                    aria-description="Add additional payer"
+                    variant="outline"
+                    size="icon"
+                    onClick={onAddPayer}
+                  >
+                    <PlusCircleIcon />
+                  </Button>
+                </div>
+                <div className="text-center h-1/2"></div>
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -86,7 +93,7 @@ export function DataTable<TData, TValue>({
           <TableRow>
             <TableCell>
               <Button
-                aria-description='Add a new cost'
+                aria-description="Add a new cost"
                 variant="outline"
                 size="icon"
                 onClick={onAddRow}
@@ -98,5 +105,5 @@ export function DataTable<TData, TValue>({
         </TableBody>
       </Table>
     </div>
-  )
-} 
+  );
+}

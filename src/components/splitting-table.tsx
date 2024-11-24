@@ -1,150 +1,179 @@
-"use client"
+'use client';
 
-import { useState } from 'react'
-import { DataTable } from '@/components/data-table'
+import { useState } from 'react';
+import { DataTable } from '@/components/data-table';
 import { createColumns, TableRowI, Payer } from '@/components/columns';
 
 const initialTableRows: TableRowI[] = [
   {
     id: 1,
-    costname: "Essen",
+    costname: 'Essen',
     amount: 123,
     payedBy: 1,
     costSplitting: new Map([
       [1, 100],
       [2, 100],
-      [3, 100]
-    ])
+      [3, 100],
+    ]),
   },
   {
     id: 2,
-    costname: "Getränke",
+    costname: 'Getränke',
     amount: 95,
     payedBy: 2,
     costSplitting: new Map([
       [1, 100],
       [2, 100],
-      [3, 100]
-    ])
+      [3, 100],
+    ]),
   },
   {
     id: 3,
-    costname: "Taxi",
+    costname: 'Taxi',
     amount: 45,
     payedBy: 3,
     costSplitting: new Map([
       [1, 100],
       [2, 100],
-      [3, 100]
-    ])
-  }
-]
+      [3, 100],
+    ]),
+  },
+];
 
 const initialPayers: Payer[] = [
   {
     id: 1,
-    name: "Max Mustermann"
+    name: 'Max Mustermann',
   },
   {
     id: 2,
-    name: "Peter Muffey",
+    name: 'Peter Muffey',
   },
   {
     id: 3,
-    name: "Sebastian Meier"
-  }
-]
+    name: 'Sebastian Meier',
+  },
+];
+
+const calculateTotalAmount = (rows: TableRowI[]): number => {
+  return rows.reduce((sum, row) => sum + row.amount, 0);
+};
+
+const calculatePayerBalance = (rows: TableRowI[], payerId: number): number => {
+  return rows.reduce((balance, row) => {
+    // Add what they paid
+    const paid = row.payedBy === payerId ? row.amount : 0;
+    // Subtract what they owe
+    const owed = row.costSplitting.get(payerId) || 0;
+    return balance + paid - owed;
+  }, 0);
+};
 
 export default function SplittingTable() {
-  const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows)
-  const [payers, setPayers] = useState<Payer[]>(initialPayers)
+  const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
+  const [payers, setPayers] = useState<Payer[]>(initialPayers);
 
   const handleCostNameChange = (rowId: number, newName: string) => {
-    setTableRows(prevRows =>
-      prevRows.map(row =>
-        row.id === rowId ? { ...row, costname: newName } : row
-      )
-    )
-  }
+    setTableRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === rowId ? { ...row, costname: newName } : row,
+      ),
+    );
+  };
 
   const handleAmountChange = (rowId: number, newAmount: number): void => {
-    setTableRows(prevRows =>
-      prevRows.map(row =>
-        row.id === rowId ? { ...row, amount: newAmount } : row
-      )
+    setTableRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === rowId ? { ...row, amount: newAmount } : row,
+      ),
     );
   };
 
   const handlePayerChange = (rowId: number, newPayerId: number): void => {
-    setTableRows(prevRows =>
-      prevRows.map(row =>
-        row.id === rowId ? { ...row, payedBy: newPayerId } : row
-      )
+    setTableRows((prevRows) =>
+      prevRows.map((row) =>
+        row.id === rowId ? { ...row, payedBy: newPayerId } : row,
+      ),
     );
   };
 
   const handleCostSplittingChange = (
     rowId: number,
     payerId: number,
-    newAmount: number
+    newAmount: number,
   ): void => {
-    setTableRows(prevRows =>
-      prevRows.map(row => {
+    setTableRows((prevRows) =>
+      prevRows.map((row) => {
         if (row.id === rowId) {
           const updatedSplitting = new Map(row.costSplitting);
           updatedSplitting.set(payerId, newAmount);
           return { ...row, costSplitting: updatedSplitting };
         }
         return row;
-      })
+      }),
     );
   };
 
   const handleAddRow = (): void => {
-    const newId = Math.max(...tableRows.map(row => row.id), 0) + 1;
-    const defaultSplitting = new Map(
-      payers.map(payer => [payer.id, 0])
-    );
-    
+    const newId = Math.max(...tableRows.map((row) => row.id), 0) + 1;
+    const defaultSplitting = new Map(payers.map((payer) => [payer.id, 0]));
+
     const newRow: TableRowI = {
       id: newId,
-      costname: "",
+      costname: '',
       amount: 0,
       payedBy: payers[0]?.id ?? 1,
-      costSplitting: defaultSplitting
+      costSplitting: defaultSplitting,
     };
-    
-    setTableRows(prevRows => [...prevRows, newRow]);
+
+    setTableRows((prevRows) => [...prevRows, newRow]);
   };
 
   const handleAddPayer = (): void => {
-    const newId = Math.max(...payers.map(payer => payer.id), 0) + 1;
+    const newId = Math.max(...payers.map((payer) => payer.id), 0) + 1;
     const newPayer: Payer = {
       id: newId,
-      name: ""
+      name: '',
     };
-    
-    setPayers(prevPayers => [...prevPayers, newPayer]);
-    
+
+    setPayers((prevPayers) => [...prevPayers, newPayer]);
+
     // Update all existing rows to include the new payer in costSplitting
-    setTableRows(prevRows =>
-      prevRows.map(row => ({
+    setTableRows((prevRows) =>
+      prevRows.map((row) => ({
         ...row,
         costSplitting: new Map([
           ...Array.from(row.costSplitting.entries()),
-          [newId, 0]
-        ])
-      }))
+          [newId, 0],
+        ]),
+      })),
     );
   };
+
+  const handlePayerNameChange = (payerId: number, newName: string): void => {
+    setPayers((prevPayers) =>
+      prevPayers.map((payer) =>
+        payer.id === payerId ? { ...payer, name: newName } : payer,
+      ),
+    );
+  };
+
+  const totalAmount = calculateTotalAmount(tableRows);
+  const payerBalances = payers.map((payer) => ({
+    id: payer.id,
+    balance: calculatePayerBalance(tableRows, payer.id),
+  }));
 
   const columns = createColumns(
     payers,
     handleCostNameChange,
     handleAmountChange,
     handlePayerChange,
-    handleCostSplittingChange
-  )
+    handleCostSplittingChange,
+    handlePayerNameChange,
+    totalAmount,
+    payerBalances,
+  );
 
   return (
     <div className="container mx-auto py-10">
@@ -155,5 +184,5 @@ export default function SplittingTable() {
         onAddPayer={handleAddPayer}
       />
     </div>
-  )
+  );
 }
