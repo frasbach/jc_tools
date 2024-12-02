@@ -2,15 +2,18 @@
 
 import { useState } from 'react';
 import { DataTable } from '@/components/data-table';
-import { createColumns, TableRowI, Payer } from '@/components/columns';
+import { createColumns } from '@/components/columns';
+import { Payer, TableRowI } from '@/lib/transaction-calculation';
+import { TransactionSummary } from '@/components/transaction-summary';
+import { calculateMinimalTransactions } from '@/lib/transaction-calculation';
 
 const initialTableRows: TableRowI[] = [
   {
     id: 1,
     costname: 'Essen',
-    amount: 123,
-    payedBy: 1,
-    costSplitting: new Map([
+    costamount: 123.55,
+    payedByUserId: 1,
+    costfactor: new Map([
       [1, 100],
       [2, 100],
       [3, 100],
@@ -19,9 +22,9 @@ const initialTableRows: TableRowI[] = [
   {
     id: 2,
     costname: 'Getränke',
-    amount: 95,
-    payedBy: 2,
-    costSplitting: new Map([
+    costamount: 95.75,
+    payedByUserId: 2,
+    costfactor: new Map([
       [1, 100],
       [2, 100],
       [3, 100],
@@ -30,9 +33,9 @@ const initialTableRows: TableRowI[] = [
   {
     id: 3,
     costname: 'Taxi',
-    amount: 45,
-    payedBy: 3,
-    costSplitting: new Map([
+    costamount: 45.3,
+    payedByUserId: 3,
+    costfactor: new Map([
       [1, 100],
       [2, 100],
       [3, 100],
@@ -56,16 +59,27 @@ const initialPayers: Payer[] = [
 ];
 
 const calculateTotalAmount = (rows: TableRowI[]): number => {
-  return rows.reduce((sum, row) => sum + row.amount, 0);
+  return rows.reduce((sum, row) => sum + row.costamount, 0);
 };
 
 const calculatePayerBalance = (rows: TableRowI[], payerId: number): number => {
   return rows.reduce((balance, row) => {
-    // Add what they paid
-    const paid = row.payedBy === payerId ? row.amount : 0;
-    // Subtract what they owe
-    const owed = row.costSplitting.get(payerId) || 0;
-    return balance + paid - owed;
+    // What they paid (if they paid for this cost)
+    const paid = row.payedByUserId === payerId ? row.costamount : 0;
+
+    // Calculate total factors for this cost
+    const totalFactors = Array.from(row.costfactor.values()).reduce(
+      (sum, factor) => sum + factor,
+      0,
+    );
+
+    // Calculate their share of this cost based on their factor
+    const theirFactor = row.costfactor.get(payerId) || 0;
+    const theirShare =
+      totalFactors > 0 ? (theirFactor / totalFactors) * row.costamount : 0;
+
+    // Add what they paid, subtract what they owe
+    return Number((balance + paid - theirShare).toFixed(2));
   }, 0);
 };
 
@@ -84,7 +98,7 @@ export default function SplittingTable() {
   const handleAmountChange = (rowId: number, newAmount: number): void => {
     setTableRows((prevRows) =>
       prevRows.map((row) =>
-        row.id === rowId ? { ...row, amount: newAmount } : row,
+        row.id === rowId ? { ...row, costamount: newAmount } : row,
       ),
     );
   };
@@ -92,7 +106,7 @@ export default function SplittingTable() {
   const handlePayerChange = (rowId: number, newPayerId: number): void => {
     setTableRows((prevRows) =>
       prevRows.map((row) =>
-        row.id === rowId ? { ...row, payedBy: newPayerId } : row,
+        row.id === rowId ? { ...row, payedByUserId: newPayerId } : row,
       ),
     );
   };
@@ -105,9 +119,9 @@ export default function SplittingTable() {
     setTableRows((prevRows) =>
       prevRows.map((row) => {
         if (row.id === rowId) {
-          const updatedSplitting = new Map(row.costSplitting);
+          const updatedSplitting = new Map(row.costfactor);
           updatedSplitting.set(payerId, newAmount);
-          return { ...row, costSplitting: updatedSplitting };
+          return { ...row, costfactor: updatedSplitting };
         }
         return row;
       }),
@@ -121,9 +135,9 @@ export default function SplittingTable() {
     const newRow: TableRowI = {
       id: newId,
       costname: '',
-      amount: 0,
-      payedBy: payers[0]?.id ?? 1,
-      costSplitting: defaultSplitting,
+      costamount: 0,
+      payedByUserId: payers[0]?.id ?? 1,
+      costfactor: defaultSplitting,
     };
 
     setTableRows((prevRows) => [...prevRows, newRow]);
@@ -143,7 +157,7 @@ export default function SplittingTable() {
       prevRows.map((row) => ({
         ...row,
         costSplitting: new Map([
-          ...Array.from(row.costSplitting.entries()),
+          ...Array.from(row.costfactor.entries()),
           [newId, 0],
         ]),
       })),
@@ -175,14 +189,17 @@ export default function SplittingTable() {
     payerBalances,
   );
 
+  const transactions = calculateMinimalTransactions(payerBalances);
+
   return (
-    <div className="container mx-auto py-10">
+    <div className="space-y-8">
       <DataTable
         columns={columns}
         data={tableRows}
         onAddRow={handleAddRow}
         onAddPayer={handleAddPayer}
       />
+      <TransactionSummary transactions={transactions} payers={payers} />
     </div>
   );
 }

@@ -9,19 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-export interface TableRowI {
-  id: number;
-  costname: string;
-  amount: number;
-  payedBy: number;
-  costSplitting: Map<number, number>;
-}
-
-export interface Payer {
-  id: number;
-  name: string;
-}
+import { Payer, TableRowI } from '@/lib/transaction-calculation';
 
 export const createColumns = (
   payers: Payer[],
@@ -39,10 +27,12 @@ export const createColumns = (
 ): ColumnDef<TableRowI>[] => [
   {
     accessorKey: 'costname',
-    header: () => (
+    header: (row) => (
       <div className="space-y-2 min-w-30 h-full">
         <div className="flex items-center justify-center h-1/2">Costname</div>
-        <div className="text-center h-1/2">${}</div>
+        <div className="text-center h-1/2">
+          {row.table.getRowModel().rows.length}
+        </div>
       </div>
     ),
     cell: ({ row }) => (
@@ -79,7 +69,7 @@ export const createColumns = (
         <Input
           type="number"
           placeholder="Amount"
-          defaultValue={row.original.amount}
+          defaultValue={row.original.costamount}
           onBlur={(e) =>
             handleAmountChange(row.original.id, Number(e.target.value))
           }
@@ -99,7 +89,7 @@ export const createColumns = (
     cell: ({ row }) => (
       <div className="min-w-[150px]">
         <Select
-          value={String(row.original.payedBy)}
+          value={String(row.original.payedByUserId)}
           onValueChange={(value) =>
             handlePayerChange(row.original.id, Number(value))
           }
@@ -125,9 +115,10 @@ export const createColumns = (
       id: `split-${payer.id}`,
       header: () => (
         <div className="space-y-2">
-          <div className="text-center min-w-[90px]">
+          <div className="text-center">
             <Input
               type="text"
+              placeholder="Payername"
               defaultValue={payer.name}
               className="text-center"
               onBlur={(e) => handlePayerNameChange(payer.id, e.target.value)}
@@ -135,20 +126,24 @@ export const createColumns = (
           </div>
           <div className="flex justify-center">
             <Input
-              type="text"
-              value={balance >= 0 ? balance : `-${Math.abs(balance)}`}
-              className="text-right w-20"
+              type="number"
+              value={
+                balance >= 0
+                  ? balance.toFixed(2)
+                  : `-${Math.abs(balance).toFixed(2)}`
+              }
+              className="text-right w-24"
               readOnly
             />
           </div>
         </div>
       ),
       cell: ({ row }: { row: Row<TableRowI> }) => (
-        <div className="relative flex justify-center min-w-[90px]">
+        <div className="relative flex justify-center">
           <Input
             type="number"
             placeholder="Share"
-            defaultValue={row.original.costSplitting.get(payer.id)}
+            defaultValue={row.original.costfactor.get(payer.id)}
             onBlur={(e) =>
               handleCostSplittingChange(
                 row.original.id,
@@ -156,7 +151,7 @@ export const createColumns = (
                 Number(e.target.value),
               )
             }
-            className="w-20 text-right"
+            className="w-24 text-right"
           />
         </div>
       ),
