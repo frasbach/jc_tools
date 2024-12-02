@@ -10,6 +10,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Payer, TableRowI } from '@/lib/transaction-calculation';
+import { MinusCircleIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const createColumns = (
   payers: Payer[],
@@ -22,6 +24,8 @@ export const createColumns = (
     value: number,
   ) => void,
   handlePayerNameChange: (payerId: number, value: string) => void,
+  handleDeleteRow: (rowId: number) => void,
+  handleDeletePayer: (payerId: number) => void,
   totalAmount: number,
   payerBalances: { id: number; balance: number }[],
 ): ColumnDef<TableRowI>[] => [
@@ -115,26 +119,31 @@ export const createColumns = (
       id: `split-${payer.id}`,
       header: () => (
         <div className="space-y-2">
-          <div className="text-center">
+          <div className="text-center min-w-[90px] flex items-center gap-2">
             <Input
               type="text"
-              placeholder="Payername"
               defaultValue={payer.name}
-              className="text-center"
+              className="text-center w-24"
               onBlur={(e) => handlePayerNameChange(payer.id, e.target.value)}
             />
           </div>
           <div className="flex justify-center">
             <Input
-              type="number"
-              value={
-                balance >= 0
-                  ? balance.toFixed(2)
-                  : `-${Math.abs(balance).toFixed(2)}`
-              }
-              className="text-right w-24"
+              type="text"
+              value={balance >= 0 ? balance : `-${Math.abs(balance)}`}
+              className="text-right w-20"
               readOnly
             />
+            <Button
+              aria-description="Remove this payer"
+              variant="outline"
+              size="icon"
+              className="text-destructive hover:text-destructive"
+              onClick={() => handleDeletePayer(payer.id)}
+              disabled={payers.length <= 1}
+            >
+              <MinusCircleIcon className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       ),
@@ -157,4 +166,19 @@ export const createColumns = (
       ),
     };
   }),
+  {
+    id: 'actions',
+    header: () => <div className="w-9" />,
+    cell: ({ row }) => (
+      <Button
+        aria-description="Delete this cost"
+        variant="outline"
+        size="icon"
+        className="text-destructive hover:text-destructive"
+        onClick={() => handleDeleteRow(row.original.id)}
+      >
+        <MinusCircleIcon className="h-4 w-4" />
+      </Button>
+    ),
+  },
 ];

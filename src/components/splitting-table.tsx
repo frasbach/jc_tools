@@ -172,6 +172,34 @@ export default function SplittingTable() {
     );
   };
 
+  const handleDeleteRow = (rowId: number): void => {
+    setTableRows((prevRows) => prevRows.filter((row) => row.id !== rowId));
+  };
+
+  const handleDeletePayer = (payerId: number): void => {
+    // Remove payer from payers list
+    setPayers((prevPayers) =>
+      prevPayers.filter((payer) => payer.id !== payerId),
+    );
+
+    // Update all existing rows to remove this payer's cost splitting
+    setTableRows((prevRows) =>
+      prevRows.map((row) => {
+        const newCostSplitting = new Map();
+        newCostSplitting.delete(payerId);
+        return {
+          ...row,
+          // If this payer was paying for the cost, assign it to the first remaining payer
+          payedBy:
+            row.payedByUserId === payerId
+              ? payers[0]?.id ?? 1
+              : row.payedByUserId,
+          costSplitting: newCostSplitting,
+        };
+      }),
+    );
+  };
+
   const totalAmount = calculateTotalAmount(tableRows);
   const payerBalances = payers.map((payer) => ({
     id: payer.id,
@@ -185,6 +213,8 @@ export default function SplittingTable() {
     handlePayerChange,
     handleCostSplittingChange,
     handlePayerNameChange,
+    handleDeleteRow,
+    handleDeletePayer,
     totalAmount,
     payerBalances,
   );
