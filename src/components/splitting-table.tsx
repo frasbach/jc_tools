@@ -86,6 +86,7 @@ const calculatePayerBalance = (rows: TableRowI[], payerId: number): number => {
 export default function SplittingTable() {
   const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
+  const [allRowsHavePayer, setAllRowsHavePayer] = useState<boolean>(true);
 
   const handleCostNameChange = (rowId: number, newName: string) => {
     setTableRows((prevRows) =>
@@ -185,19 +186,18 @@ export default function SplittingTable() {
     // Update all existing rows to remove this payer's cost splitting
     setTableRows((prevRows) =>
       prevRows.map((row) => {
-        const newCostSplitting = new Map();
-        newCostSplitting.delete(payerId);
         return {
           ...row,
-          // If this payer was paying for the cost, assign it to the first remaining payer
-          payedBy:
-            row.payedByUserId === payerId
-              ? payers[0]?.id ?? 1
-              : row.payedByUserId,
-          costSplitting: newCostSplitting,
+          payedByUserId: 1,
         };
       }),
     );
+    // Update allRowsHavePayer
+    const temp: boolean = tableRows.every(
+      (tableRow) => tableRow.payedByUserId !== undefined,
+    );
+    setAllRowsHavePayer(() => payers.every((payer) => payer.id !== undefined));
+    console.log('am here,   ', tableRows);
   };
 
   const totalAmount = calculateTotalAmount(tableRows);
@@ -229,7 +229,11 @@ export default function SplittingTable() {
         onAddRow={handleAddRow}
         onAddPayer={handleAddPayer}
       />
-      <TransactionSummary transactions={transactions} payers={payers} />
+      <TransactionSummary
+        transactions={transactions}
+        payers={payers}
+        allCostsHavePayer={allRowsHavePayer}
+      />
     </div>
   );
 }
