@@ -1,18 +1,17 @@
 export const siteConfig = {
-  name: "shadcn/ui",
-  url: "https://ui.shadcn.com",
-  ogImage: "https://ui.shadcn.com/og.jpg",
-  description:
-    "Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.",
+  name: 'justcurious',
+  url: 'https://justcurious.vercel.app',
+  ogImage: 'https://ui.shadcn.com/og.jpg',
+  description: 'A free, add-free and easy-to-use cost splitter',
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn-ui/ui",
+    twitter: 'https://twitter.com/tw_justcurious',
+    github: 'https://github.com/justcurious',
   },
 };
 
 export type SiteConfig = typeof siteConfig;
 
 export const META_THEME_COLORS = {
-  light: "#ffffff",
-  dark: "#09090b",
+  light: '#ffffff',
+  dark: '#09090b',
 };
