@@ -1,5 +1,5 @@
 import { Transaction } from '@/lib/transaction-calculation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/ui-components/card';
 import { ArrowRight, X } from 'lucide-react';
 
 interface TransactionSummaryProps {

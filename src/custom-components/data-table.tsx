@@ -7,14 +7,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from '@/ui-components/table';
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui-components/button';
 import { PlusCircleIcon } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {

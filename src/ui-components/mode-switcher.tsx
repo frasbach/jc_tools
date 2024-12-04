@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes';
 
 import { META_THEME_COLORS } from '@/config/site-config';
 import { useMetaColor } from '@/hooks/use-meta-color';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui-components/button';
 
 export function ModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();

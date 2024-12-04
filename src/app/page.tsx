@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { SiteHeader } from "@/components/side-header"
-import SplittingTable from "@/components/splitting-table"
+import { SiteHeader } from '@/ui-components/side-header';
+import SplittingTable from '@/custom-components/splitting-table';
 
 export default function Home() {
   return (
@@ -11,5 +11,5 @@ export default function Home() {
         <SplittingTable />
       </div>
     </div>
-  )
+  );
 }

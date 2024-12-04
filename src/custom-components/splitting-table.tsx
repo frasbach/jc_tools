@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { DataTable } from '@/components/data-table';
-import { createColumns } from '@/components/columns';
+import { DataTable } from '@/custom-components/data-table';
+import { createColumns } from '@/custom-components/columns';
 import { Payer, TableRowI } from '@/lib/transaction-calculation';
-import { TransactionSummary } from '@/components/transaction-summary';
+import { TransactionSummary } from '@/custom-components/transaction-summary';
 import { calculateMinimalTransactions } from '@/lib/transaction-calculation';
 
 const initialTableRows: TableRowI[] = [

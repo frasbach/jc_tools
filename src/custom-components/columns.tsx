@@ -1,17 +1,17 @@
 'use client';
 
 import { ColumnDef, Row } from '@tanstack/react-table';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/ui-components/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/ui-components/select';
 import { Payer, TableRowI } from '@/lib/transaction-calculation';
 import { MinusCircleIcon } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/ui-components/button';
 
 export const createColumns = (
   payers: Payer[],
