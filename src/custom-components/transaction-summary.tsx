@@ -1,12 +1,6 @@
-import { Transaction } from '@/lib/transaction-calculation';
+import { TransactionSummaryProps } from '@/types/interfaces';
 import { Card, CardContent, CardHeader, CardTitle } from '@/ui-components/card';
 import { ArrowRight, X } from 'lucide-react';
-
-interface TransactionSummaryProps {
-  transactions: Transaction[];
-  payers: { id: number; name: string }[];
-  allCostsHavePayer: boolean;
-}
 
 export function TransactionSummary({
   transactions,
@@ -22,8 +16,6 @@ export function TransactionSummary({
     amount: transaction.amount.toFixed(2),
     toPayerName: getPayerName(transaction.toUserId),
   }));
-
-  console.log('allCostHavePayer => ', allCostsHavePayer);
 
   return (
     <Card className="w-[400px]">

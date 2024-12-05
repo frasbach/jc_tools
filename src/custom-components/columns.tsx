@@ -9,25 +9,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui-components/select';
-import { Payer, TableRowI } from '@/lib/transaction-calculation';
+import { ColumnConfig, ColumnHandlers, TableRowI } from '@/types/interfaces';
 import { MinusCircleIcon } from 'lucide-react';
 import { Button } from '@/ui-components/button';
 
 export const createColumns = (
-  payers: Payer[],
-  handleCostNameChange: (rowId: number, value: string) => void,
-  handleAmountChange: (rowId: number, value: number) => void,
-  handlePayerChange: (rowId: number, value: number) => void,
-  handleCostSplittingChange: (
-    rowId: number,
-    payerId: number,
-    value: number,
-  ) => void,
-  handlePayerNameChange: (payerId: number, value: string) => void,
-  handleDeleteRow: (rowId: number) => void,
-  handleDeletePayer: (payerId: number) => void,
-  totalAmount: number,
-  payerBalances: { id: number; balance: number }[],
+  config: ColumnConfig,
+  handlers: ColumnHandlers,
 ): ColumnDef<TableRowI>[] => [
   {
     accessorKey: 'costname',
@@ -46,7 +34,7 @@ export const createColumns = (
           placeholder="Cost Name"
           value={row.original.costname}
           onChange={(e) =>
-            handleCostNameChange(row.original.id, e.target.value)
+            handlers.handleCostNameChange(row.original.id, e.target.value)
           }
           data-row-id={row.original.id}
         />
@@ -61,7 +49,7 @@ export const createColumns = (
         <div className="flex justify-center">
           <Input
             type="number"
-            value={totalAmount}
+            value={config.totalAmount}
             className="text-right w-24"
             readOnly
           />
@@ -75,7 +63,7 @@ export const createColumns = (
           placeholder="Amount"
           defaultValue={row.original.costamount}
           onBlur={(e) =>
-            handleAmountChange(row.original.id, Number(e.target.value))
+            handlers.handleAmountChange(row.original.id, Number(e.target.value))
           }
           className="text-right w-24 justify-center"
         />
@@ -95,14 +83,14 @@ export const createColumns = (
         <Select
           value={String(row.original.payedByUserId)}
           onValueChange={(value) =>
-            handlePayerChange(row.original.id, Number(value))
+            handlers.handlePayerChange(row.original.id, Number(value))
           }
         >
           <SelectTrigger>
             <SelectValue placeholder="Select a payer" />
           </SelectTrigger>
           <SelectContent>
-            {payers.map((payer) => (
+            {config.payers.map((payer) => (
               <SelectItem key={payer.id} value={String(payer.id)}>
                 {payer.name}
               </SelectItem>
@@ -112,9 +100,9 @@ export const createColumns = (
       </div>
     ),
   },
-  ...payers.map((payer) => {
+  ...config.payers.map((payer) => {
     const balance =
-      payerBalances.find((pb) => pb.id === payer.id)?.balance ?? 0;
+      config.payerBalances.find((pb) => pb.id === payer.id)?.balance ?? 0;
     return {
       id: `split-${payer.id}`,
       header: () => (
@@ -124,7 +112,9 @@ export const createColumns = (
               type="text"
               defaultValue={payer.name}
               className="text-center w-24"
-              onBlur={(e) => handlePayerNameChange(payer.id, e.target.value)}
+              onBlur={(e) =>
+                handlers.handlePayerNameChange(payer.id, e.target.value)
+              }
             />
           </div>
           <div className="flex justify-center">
@@ -139,8 +129,8 @@ export const createColumns = (
               variant="outline"
               size="icon"
               className="text-destructive hover:text-destructive"
-              onClick={() => handleDeletePayer(payer.id)}
-              disabled={payers.length <= 1}
+              onClick={() => handlers.handleDeletePayer(payer.id)}
+              disabled={config.payers.length <= 1}
             >
               <MinusCircleIcon className="h-4 w-4" />
             </Button>
@@ -154,7 +144,7 @@ export const createColumns = (
             placeholder="Share"
             defaultValue={row.original.costfactor.get(payer.id)}
             onBlur={(e) =>
-              handleCostSplittingChange(
+              handlers.handleCostSplittingChange(
                 row.original.id,
                 payer.id,
                 Number(e.target.value),
@@ -175,7 +165,7 @@ export const createColumns = (
         variant="outline"
         size="icon"
         className="text-destructive hover:text-destructive"
-        onClick={() => handleDeleteRow(row.original.id)}
+        onClick={() => handlers.handleDeleteRow(row.original.id)}
       >
         <MinusCircleIcon className="h-4 w-4" />
       </Button>

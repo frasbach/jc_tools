@@ -9,27 +9,20 @@ import {
   TableRow,
 } from '@/ui-components/table';
 import {
-  ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 import { Button } from '@/ui-components/button';
 import { PlusCircleIcon } from 'lucide-react';
+import { DataTableProps } from '@/types/interfaces';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  onAddRow: () => void;
-  onAddPayer: () => void;
-}
-
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: number }>({
   columns,
   data,
   onAddRow,
   onAddPayer,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,

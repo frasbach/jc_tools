@@ -1,21 +1,27 @@
-export interface TableRowI {
-  id: number;
-  costname: string;
-  costamount: number;
-  payedByUserId: number;
-  costfactor: Map<number, number>;
-}
+import { TableRowI, Transaction } from '@/types/interfaces';
 
-export interface Payer {
-  id: number;
-  name: string;
-}
+export const calculateTotalAmount = (rows: TableRowI[]): number =>
+  rows.reduce((sum, row) => sum + row.costamount, 0);
 
-export interface Transaction {
-  fromUserId: number;
-  toUserId: number;
-  amount: number;
-}
+export const calculatePayerBalance = (
+  rows: TableRowI[],
+  payerId: number,
+): number => {
+  return rows.reduce((balance, row) => {
+    const paid = row.payedByUserId === payerId ? row.costamount : 0;
+    const totalFactors = Array.from(row.costfactor.values()).reduce(
+      (sum, factor) => sum + factor,
+      0,
+    );
+    const theirFactor = row.costfactor.get(payerId) || 0;
+    const theirShare =
+      totalFactors > 0 ? (theirFactor / totalFactors) * row.costamount : 0;
+    return Number((balance + paid - theirShare).toFixed(2));
+  }, 0);
+};
+
+export const getNextId = <T extends { id: number }>(items: T[]): number =>
+  Math.max(...items.map((item) => item.id), 0) + 1;
 
 /**
  * Function to calculate minimal transactions to settle debts
