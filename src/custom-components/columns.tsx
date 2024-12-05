@@ -129,7 +129,10 @@ export const createColumns = (
               variant="outline"
               size="icon"
               className="text-destructive hover:text-destructive"
-              onClick={() => handlers.handleDeletePayer(payer.id)}
+              onClick={() => {
+                console.log('Payer to delete: ', payer);
+                handlers.handleDeletePayer(payer.id);
+              }}
               disabled={config.payers.length <= 1}
             >
               <MinusCircleIcon className="h-4 w-4" />

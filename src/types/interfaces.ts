@@ -38,8 +38,8 @@ export interface SplittingTableState {
 
 export interface TransactionSummaryProps {
   transactions: Transaction[];
-  payers: { id: number; name: string }[];
-  allCostsHavePayer: boolean;
+  payers: Payer[];
+  hasValidPayerAssignments: boolean;
 }
 
 export interface DataTableProps<TData extends { id: number }> {

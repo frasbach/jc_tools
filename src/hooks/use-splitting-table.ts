@@ -10,7 +10,6 @@ import {
 export const useSplittingTable = () => {
   const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
-  const [allRowsHavePayer, setAllRowsHavePayer] = useState<boolean>(true);
 
   const handleCostNameChange = useCallback((rowId: number, newName: string) => {
     setTableRows((prevRows) =>
@@ -103,25 +102,33 @@ export const useSplittingTable = () => {
 
   const handleDeletePayer = (payerId: number): void => {
     // Remove payer from payers list
-    setPayers((prevPayers) =>
-      prevPayers.filter((payer) => payer.id !== payerId),
-    );
+    console.log('payers before: ', payers);
+    setPayers((prevPayers) => {
+      const updatedPayers = prevPayers.filter((payer) => payer.id !== payerId);
+      console.log('payers inside: ', updatedPayers);
+      return [...updatedPayers];
+    });
+    console.log('payers after: ', payers);
 
-    // Update all existing rows to remove this payer's cost splitting
+    // Update rows that were paid by the deleted payer to set their payedByUserId to 1
     setTableRows((prevRows) =>
-      prevRows.map((row) => {
-        return {
-          ...row,
-          payedByUserId: 1,
-        };
-      }),
+      prevRows.map((row) =>
+        row.payedByUserId === payerId
+          ? {
+              ...row,
+              payedByUserId: Math.min(...payers.map((payer) => payer.id)),
+            }
+          : row,
+      ),
     );
-    // Update allRowsHavePayer
-    const temp: boolean = tableRows.every(
-      (tableRow) => tableRow.payedByUserId !== undefined,
+    console.log(
+      'rows:  ',
+      tableRows,
+      '  payers: ',
+      payers,
+      'payerId: ',
+      payerId,
     );
-    setAllRowsHavePayer(() => payers.every((payer) => payer.id !== undefined));
-    console.log('am here,   ', tableRows);
   };
 
   const totalAmount = calculateTotalAmount(tableRows);
@@ -131,13 +138,19 @@ export const useSplittingTable = () => {
   }));
   const transactions = calculateMinimalTransactions(payerBalances);
 
+  const validatePayerAssignments = (): boolean => {
+    return tableRows.every(
+      (row) => row.payedByUserId && row.payedByUserId != null,
+    );
+  };
+
   return {
     tableRows,
     payers,
-    allRowsHavePayer,
     totalAmount,
     payerBalances,
     transactions,
+    hasValidPayerAssignments: validatePayerAssignments(),
     handlers: {
       handleCostNameChange,
       handleAmountChange,
