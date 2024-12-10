@@ -17,7 +17,7 @@ export function TransactionSummary({
   }));
 
   return (
-    <Card className="w-[400px]">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-xl">Settlement Summary</CardTitle>
       </CardHeader>

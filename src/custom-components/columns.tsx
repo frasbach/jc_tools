@@ -21,7 +21,7 @@ export const createColumns = (
     accessorKey: 'costname',
     header: (row) => (
       <div className="space-y-2 min-w-30 h-full">
-        <div className="flex items-center justify-center h-1/2">Costname</div>
+        <div className="flex items-center justify-center h-1/2">Cost Name</div>
         <div className="text-center h-1/2">
           {row.table.getRowModel().rows.length}
         </div>

@@ -31,7 +31,7 @@ export function DefaultSettingsCard({
       <CardHeader>
         <CardTitle>Default Settings</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-4">
+      <CardContent className="flex flex-col gap-4">
         <div>
           <label
             htmlFor="defaultCostFactor"
@@ -54,7 +54,7 @@ export function DefaultSettingsCard({
             htmlFor="defaultPayer"
             className="text-sm font-medium block mb-2"
           >
-            Default Payer
+            Payer
           </label>
           <Select
             value={String(defaultPayer)}

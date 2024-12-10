@@ -31,24 +31,28 @@ export default function SplittingTable() {
 
   return (
     <div className="space-y-8">
-      <DefaultSettingsCard
-        defaultCostFactor={defaultCostFactor}
-        defaultPayer={defaultPayer}
-        payers={payers}
-        onDefaultCostFactorChange={handlers.handleDefaultCostFactorChange}
-        onDefaultPayerChange={handlers.handleDefaultPayerChange}
-      />
       <DataTable
         columns={columns}
         data={tableRows}
         onAddRow={handlers.handleAddRow}
         onAddPayer={handlers.handleAddPayer}
       />
-      <TransactionSummary
-        transactions={transactions}
-        payers={payers}
-        hasValidPayerAssignments={hasValidPayerAssignments}
-      />
+      <div className="flex gap-8 items-start">
+        <div className="flex-1">
+          <TransactionSummary
+            transactions={transactions}
+            payers={payers}
+            hasValidPayerAssignments={hasValidPayerAssignments}
+          />
+        </div>
+        <DefaultSettingsCard
+          defaultCostFactor={defaultCostFactor}
+          defaultPayer={defaultPayer}
+          payers={payers}
+          onDefaultCostFactorChange={handlers.handleDefaultCostFactorChange}
+          onDefaultPayerChange={handlers.handleDefaultPayerChange}
+        />
+      </div>
     </div>
   );
 }
