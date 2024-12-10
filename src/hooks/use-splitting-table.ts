@@ -10,6 +10,13 @@ import {
 export const useSplittingTable = () => {
   const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
+  const [defaultCostFactor, setDefaultCostFactor] = useState<number>(100);
+
+  const handleDefaultCostFactorChange = useCallback((newValue: number) => {
+    if (newValue >= 1 && newValue <= 1000) {
+      setDefaultCostFactor(newValue);
+    }
+  }, []);
 
   const handleCostNameChange = useCallback((rowId: number, newName: string) => {
     setTableRows((prevRows) =>
@@ -53,7 +60,9 @@ export const useSplittingTable = () => {
 
   const handleAddRow = useCallback(() => {
     const newId = Math.max(...tableRows.map((row) => row.id), 0) + 1;
-    const defaultSplitting = new Map(payers.map((payer) => [payer.id, 0]));
+    const defaultSplitting = new Map(
+      payers.map((payer) => [payer.id, defaultCostFactor]),
+    );
 
     const newRow: TableRowI = {
       id: newId,
@@ -64,7 +73,7 @@ export const useSplittingTable = () => {
     };
 
     setTableRows((prevRows) => [...prevRows, newRow]);
-  }, [payers, tableRows]);
+  }, [payers, tableRows, defaultCostFactor]);
 
   const handleAddPayer = useCallback(() => {
     const newId = Math.max(...payers.map((payer) => payer.id), 0) + 1;
@@ -79,11 +88,11 @@ export const useSplittingTable = () => {
         ...row,
         costfactor: new Map([
           ...Array.from(row.costfactor.entries()),
-          [newId, 0],
+          [newId, defaultCostFactor],
         ]),
       })),
     );
-  }, [payers]);
+  }, [payers, defaultCostFactor]);
 
   const handlePayerNameChange = useCallback(
     (payerId: number, newName: string) => {
@@ -151,6 +160,7 @@ export const useSplittingTable = () => {
     payerBalances,
     transactions,
     hasValidPayerAssignments: validatePayerAssignments(),
+    defaultCostFactor,
     handlers: {
       handleCostNameChange,
       handleAmountChange,
@@ -161,6 +171,7 @@ export const useSplittingTable = () => {
       handlePayerNameChange,
       handleDeleteRow,
       handleDeletePayer,
+      handleDefaultCostFactorChange,
     },
   };
 };

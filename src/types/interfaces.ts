@@ -61,10 +61,12 @@ export interface ColumnHandlers {
   readonly handlePayerNameChange: (payerId: number, value: string) => void;
   readonly handleDeleteRow: (rowId: number) => void;
   readonly handleDeletePayer: (payerId: number) => void;
+  readonly handleDefaultCostFactorChange: (value: number) => void;
 }
 
 export interface ColumnConfig {
-  readonly payers: readonly Payer[];
-  readonly totalAmount: number;
-  readonly payerBalances: readonly { id: number; balance: number }[];
+  payers: Payer[];
+  totalAmount: number;
+  payerBalances: PayerBalance[];
+  defaultCostFactor: number;
 }
