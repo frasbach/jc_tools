@@ -111,13 +111,10 @@ export const useSplittingTable = () => {
 
   const handleDeletePayer = (payerId: number): void => {
     // Remove payer from payers list
-    console.log('payers before: ', payers);
     setPayers((prevPayers) => {
       const updatedPayers = prevPayers.filter((payer) => payer.id !== payerId);
-      console.log('payers inside: ', updatedPayers);
       return [...updatedPayers];
     });
-    console.log('payers after: ', payers);
 
     // Update rows that were paid by the deleted payer to set their payedByUserId to 1
     setTableRows((prevRows) =>
@@ -129,14 +126,6 @@ export const useSplittingTable = () => {
             }
           : row,
       ),
-    );
-    console.log(
-      'rows:  ',
-      tableRows,
-      '  payers: ',
-      payers,
-      'payerId: ',
-      payerId,
     );
   };
 

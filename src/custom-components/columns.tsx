@@ -130,7 +130,6 @@ export const createColumns = (
               size="icon"
               className="text-destructive hover:text-destructive"
               onClick={() => {
-                console.log('Payer to delete: ', payer);
                 handlers.handleDeletePayer(payer.id);
               }}
               disabled={config.payers.length <= 1}
