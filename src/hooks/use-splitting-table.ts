@@ -11,6 +11,9 @@ export const useSplittingTable = () => {
   const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
   const [defaultCostFactor, setDefaultCostFactor] = useState<number>(100);
+  const [defaultPayer, setDefaultPayer] = useState<number>(
+    initialPayers[0]?.id ?? 1,
+  );
 
   const handleDefaultCostFactorChange = useCallback((newValue: number) => {
     if (newValue >= 1 && newValue <= 1000) {
@@ -68,12 +71,12 @@ export const useSplittingTable = () => {
       id: newId,
       costname: '',
       costamount: 0,
-      payedByUserId: payers[0]?.id ?? 1,
+      payedByUserId: defaultPayer,
       costfactor: defaultSplitting,
     };
 
     setTableRows((prevRows) => [...prevRows, newRow]);
-  }, [payers, tableRows, defaultCostFactor]);
+  }, [payers, tableRows, defaultCostFactor, defaultPayer]);
 
   const handleAddPayer = useCallback(() => {
     const newId = Math.max(...payers.map((payer) => payer.id), 0) + 1;
@@ -129,6 +132,10 @@ export const useSplittingTable = () => {
     );
   };
 
+  const handleDefaultPayerChange = useCallback((newPayerId: number) => {
+    setDefaultPayer(newPayerId);
+  }, []);
+
   const totalAmount = calculateTotalAmount(tableRows);
   const payerBalances = payers.map((payer) => ({
     id: payer.id,
@@ -150,6 +157,7 @@ export const useSplittingTable = () => {
     transactions,
     hasValidPayerAssignments: validatePayerAssignments(),
     defaultCostFactor,
+    defaultPayer,
     handlers: {
       handleCostNameChange,
       handleAmountChange,
@@ -161,6 +169,7 @@ export const useSplittingTable = () => {
       handleDeleteRow,
       handleDeletePayer,
       handleDefaultCostFactorChange,
+      handleDefaultPayerChange,
     },
   };
 };
