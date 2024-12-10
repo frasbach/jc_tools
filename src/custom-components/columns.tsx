@@ -32,8 +32,8 @@ export const createColumns = (
         <Input
           type="text"
           placeholder="Cost Name"
-          value={row.original.costname}
-          onChange={(e) =>
+          defaultValue={row.original.costname}
+          onBlur={(e) =>
             handlers.handleCostNameChange(row.original.id, e.target.value)
           }
           data-row-id={row.original.id}
