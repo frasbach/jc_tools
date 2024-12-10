@@ -1,32 +1,17 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Free Cost Splitter
 
-## Getting Started
+This is a simple cost splitting tool that allows you to split a cost between multiple payers.
 
-First, run the development server:
+## Todos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] deploy with max payment amount!
+- [ ] think about a name for the multiple app page
+- [ ] create layout containing sidebar, header and footer
+- [ ] find out how its possible to use testdata localy but not in the hosted version
+- [ ] look if it is possible to only receive the static side of the selected app
+- [ ] add export and import functionality
+- [ ] add a feature to reset all splitting calculations
+- [ ]
 
 ## Deploy on Vercel
 
