@@ -2,7 +2,7 @@
 
 import { DataTable } from '@/custom-components/data-table';
 import { createColumns } from '@/custom-components/columns';
-import { TransactionSummary } from '@/custom-components/transaction-summary';
+import { SettlementSummary } from '@/custom-components/settlement-summary';
 import { useSplittingTable } from '@/hooks/use-splitting-table';
 import { DefaultSettingsCard } from '@/custom-components/default-settings-card';
 
@@ -39,7 +39,7 @@ export default function SplittingTable() {
       />
       <div className="flex gap-8 items-start">
         <div className="flex-1">
-          <TransactionSummary
+          <SettlementSummary
             transactions={transactions}
             payers={payers}
             hasValidPayerAssignments={hasValidPayerAssignments}
