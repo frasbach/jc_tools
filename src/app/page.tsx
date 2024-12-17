@@ -1,12 +1,11 @@
 'use client';
 
-import { SiteHeader } from '@/ui-components/side-header';
 import SplittingTable from '@/custom-components/splitting-table';
 
 export default function Home() {
   return (
     <div className="main">
-      <SiteHeader />
+      {/* <SiteHeader /> */}
       <div className="flex min-h-screen items-start pt-8 justify-center">
         <SplittingTable />
       </div>

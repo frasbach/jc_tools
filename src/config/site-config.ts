@@ -9,6 +9,7 @@ export const siteConfig = {
   links: {
     twitter: 'https://twitter.com/tw_justcurious',
     github: 'https://github.com/justcurious',
+    paypal: 'https://paypal.me/florianrasbach',
   },
 };
 

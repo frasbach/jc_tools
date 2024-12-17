@@ -17,6 +17,8 @@ import {
 import { Separator } from '@/ui-components/separator';
 import { AppSidebar } from '@/custom-components/app-sidebar';
 import { sidebarGroupValues } from '@/config/site-config';
+import { ModeSwitcher } from '@/ui-components/mode-switcher';
+import { SiteFooter } from '@/ui-components/footer';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({
@@ -29,13 +31,12 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
           <SidebarProvider>
             <AppSidebar sidebarGroups={sidebarGroupValues} />
-
             <SidebarInset>
               <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
                 <SidebarTrigger className="-ml-1" />
@@ -51,8 +52,11 @@ export default function RootLayout({
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
+                <div className="flex-grow"></div>
+                <ModeSwitcher />
               </header>
               <main>{children}</main>
+              <SiteFooter />
             </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>
