@@ -112,25 +112,34 @@ export const useSplittingTable = () => {
     setTableRows((prevRows) => prevRows.filter((row) => row.id !== rowId));
   }, []);
 
-  const handleDeletePayer = (payerId: number): void => {
-    // Remove payer from payers list
-    setPayers((prevPayers) => {
-      const updatedPayers = prevPayers.filter((payer) => payer.id !== payerId);
-      return [...updatedPayers];
-    });
+  const handleDeletePayer = useCallback(
+    (payerId: number): void => {
+      setPayers((prevPayers) => {
+        const updatedPayers = prevPayers.filter(
+          (payer) => payer.id !== payerId,
+        );
+        if (payerId === defaultPayer && updatedPayers.length > 0) {
+          const newDefaultPayer = Math.min(
+            ...updatedPayers.map((payer) => payer.id),
+          );
+          setDefaultPayer(newDefaultPayer);
+        }
+        return updatedPayers;
+      });
 
-    // Update rows that were paid by the deleted payer to set their payedByUserId to 1
-    setTableRows((prevRows) =>
-      prevRows.map((row) =>
-        row.payedByUserId === payerId
-          ? {
-              ...row,
-              payedByUserId: Math.min(...payers.map((payer) => payer.id)),
-            }
-          : row,
-      ),
-    );
-  };
+      setTableRows((prevRows) =>
+        prevRows.map((row) =>
+          row.payedByUserId === payerId
+            ? {
+                ...row,
+                payedByUserId: Math.min(...payers.map((payer) => payer.id)),
+              }
+            : row,
+        ),
+      );
+    },
+    [payers, defaultPayer],
+  );
 
   const handleDefaultPayerChange = useCallback((newPayerId: number) => {
     setDefaultPayer(newPayerId);

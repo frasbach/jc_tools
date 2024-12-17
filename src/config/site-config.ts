@@ -1,4 +1,4 @@
-import { Home, LucideProps } from 'lucide-react';
+import { Calculator, Home, LucideProps } from 'lucide-react';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 
 export const siteConfig = {
@@ -28,7 +28,7 @@ export const sidebarGroupValues: SidebarGroupType[] = [
       {
         title: 'Cost Splitter',
         url: '/cost-splitter',
-        icon: Home,
+        icon: Calculator,
       },
     ],
   },
