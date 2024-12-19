@@ -145,6 +145,13 @@ export const useSplittingTable = () => {
     setDefaultPayer(newPayerId);
   }, []);
 
+  const handleResetTable = useCallback(() => {
+    setTableRows(initialTableRows);
+    setPayers(initialPayers);
+    setDefaultCostFactor(100);
+    setDefaultPayer(initialPayers[0]?.id ?? 1);
+  }, []);
+
   const totalAmount = calculateTotalAmount(tableRows);
   const payerBalances = payers.map((payer) => ({
     id: payer.id,
@@ -179,6 +186,7 @@ export const useSplittingTable = () => {
       handleDeletePayer,
       handleDefaultCostFactorChange,
       handleDefaultPayerChange,
+      handleResetTable,
     },
   };
 };

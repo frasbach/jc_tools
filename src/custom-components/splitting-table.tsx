@@ -51,6 +51,7 @@ export default function SplittingTable() {
           payers={payers}
           onDefaultCostFactorChange={handlers.handleDefaultCostFactorChange}
           onDefaultPayerChange={handlers.handleDefaultPayerChange}
+          onResetTable={handlers.handleResetTable}
         />
       </div>
     </div>

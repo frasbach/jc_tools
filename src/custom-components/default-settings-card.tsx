@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/ui-components/select';
 import { Payer } from '@/types/interfaces';
+import { Button } from '@/ui-components/button';
 
 interface DefaultSettingsCardProps {
   defaultCostFactor: number;
@@ -17,6 +18,7 @@ interface DefaultSettingsCardProps {
   payers: Payer[];
   onDefaultCostFactorChange: (value: number) => void;
   onDefaultPayerChange: (value: number) => void;
+  onResetTable: () => void;
 }
 
 export function DefaultSettingsCard({
@@ -25,11 +27,12 @@ export function DefaultSettingsCard({
   payers,
   onDefaultCostFactorChange,
   onDefaultPayerChange,
+  onResetTable,
 }: DefaultSettingsCardProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Default Settings</CardTitle>
+        <CardTitle>Settings / Actions</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div>
@@ -74,6 +77,14 @@ export function DefaultSettingsCard({
               ))}
             </SelectContent>
           </Select>
+        </div>
+        <div>
+          <Button>Export as JSON</Button>
+        </div>
+        <div>
+          <Button variant="destructive" onClick={onResetTable}>
+            Reset Table
+          </Button>
         </div>
       </CardContent>
     </Card>
