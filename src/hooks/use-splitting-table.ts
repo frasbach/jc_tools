@@ -7,6 +7,19 @@ import {
   calculateTotalAmount,
 } from '@/lib/transaction-calculation';
 
+interface ExportData {
+  tableRows: {
+    id: number;
+    costname: string;
+    costamount: number;
+    payedByUserId: number;
+    costfactor: [number, number][]; // Convert Map to array of tuples for JSON
+  }[];
+  payers: Payer[];
+  defaultCostFactor: number;
+  defaultPayer: number;
+}
+
 export const useSplittingTable = () => {
   const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
@@ -152,6 +165,32 @@ export const useSplittingTable = () => {
     setDefaultPayer(initialPayers[0]?.id ?? 1);
   }, []);
 
+  const handleExportJson = useCallback(() => {
+    const exportData: ExportData = {
+      tableRows: tableRows.map((row) => ({
+        ...row,
+        costfactor: Array.from(row.costfactor.entries()),
+      })),
+      payers,
+      defaultCostFactor,
+      defaultPayer,
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: 'application/json',
+    });
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `cost_splitter_export_${timestamp}.json`;
+    link.click();
+
+    URL.revokeObjectURL(url); // Clean up the URL object
+  }, [tableRows, payers, defaultCostFactor, defaultPayer]);
+
   const totalAmount = calculateTotalAmount(tableRows);
   const payerBalances = payers.map((payer) => ({
     id: payer.id,
@@ -187,6 +226,7 @@ export const useSplittingTable = () => {
       handleDefaultCostFactorChange,
       handleDefaultPayerChange,
       handleResetTable,
+      handleExportJson,
     },
   };
 };

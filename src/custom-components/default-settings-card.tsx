@@ -19,6 +19,7 @@ interface DefaultSettingsCardProps {
   onDefaultCostFactorChange: (value: number) => void;
   onDefaultPayerChange: (value: number) => void;
   onResetTable: () => void;
+  onExportJson: () => void;
 }
 
 export function DefaultSettingsCard({
@@ -28,6 +29,7 @@ export function DefaultSettingsCard({
   onDefaultCostFactorChange,
   onDefaultPayerChange,
   onResetTable,
+  onExportJson,
 }: DefaultSettingsCardProps) {
   return (
     <Card>
@@ -79,7 +81,7 @@ export function DefaultSettingsCard({
           </Select>
         </div>
         <div>
-          <Button>Export as JSON</Button>
+          <Button onClick={onExportJson}>Export as JSON</Button>
         </div>
         <div>
           <Button variant="destructive" onClick={onResetTable}>

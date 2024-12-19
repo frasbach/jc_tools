@@ -52,6 +52,7 @@ export default function SplittingTable() {
           onDefaultCostFactorChange={handlers.handleDefaultCostFactorChange}
           onDefaultPayerChange={handlers.handleDefaultPayerChange}
           onResetTable={handlers.handleResetTable}
+          onExportJson={handlers.handleExportJson}
         />
       </div>
     </div>
