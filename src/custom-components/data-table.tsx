@@ -14,15 +14,24 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Button } from '@/ui-components/button';
-import { PlusCircleIcon } from 'lucide-react';
-import { DataTableProps } from '@/types/interfaces';
+import { PlusCircleIcon, MinusCircleIcon } from 'lucide-react';
+import {
+  DataTableProps,
+  ColumnHandlers,
+  ColumnConfig,
+} from '@/types/interfaces';
 
 export function DataTable<TData extends { id: number }>({
   columns,
   data,
   onAddRow,
   onAddPayer,
-}: DataTableProps<TData>) {
+  handlers,
+  config,
+}: DataTableProps<TData> & {
+  handlers: ColumnHandlers;
+  config: ColumnConfig;
+}) {
   const table = useReactTable({
     data,
     columns,
@@ -94,6 +103,30 @@ export function DataTable<TData extends { id: number }>({
                 <PlusCircleIcon />
               </Button>
             </TableCell>
+            <TableCell />
+            <TableCell />
+            {columns
+              .filter((col) => col.id?.startsWith('split-'))
+              .map((col) => {
+                const payerId = Number(col.id?.split('-')[1]);
+                return (
+                  <TableCell key={col.id}>
+                    <div className="flex justify-center">
+                      <Button
+                        aria-description="Remove this payer"
+                        variant="outline"
+                        size="icon"
+                        className="text-destructive hover:text-destructive"
+                        onClick={() => handlers.handleDeletePayer(payerId)}
+                        disabled={config.payers.length <= 1}
+                      >
+                        <MinusCircleIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                );
+              })}
+            <TableCell />
           </TableRow>
         </TableBody>
       </Table>

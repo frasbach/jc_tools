@@ -124,18 +124,6 @@ export const createColumns = (
               className="text-right w-20"
               readOnly
             />
-            <Button
-              aria-description="Remove this payer"
-              variant="outline"
-              size="icon"
-              className="text-destructive hover:text-destructive"
-              onClick={() => {
-                handlers.handleDeletePayer(payer.id);
-              }}
-              disabled={config.payers.length <= 1}
-            >
-              <MinusCircleIcon className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       ),

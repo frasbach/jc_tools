@@ -36,6 +36,13 @@ export default function SplittingTable() {
         data={tableRows}
         onAddRow={handlers.handleAddRow}
         onAddPayer={handlers.handleAddPayer}
+        handlers={handlers}
+        config={{
+          payers,
+          totalAmount,
+          payerBalances,
+          defaultCostFactor,
+        }}
       />
       <div className="flex gap-8 items-start">
         <div className="flex-1">
