@@ -1,19 +1,12 @@
-# Free Cost Splitter
+# JC Tools
 
-This is a simple cost splitting tool that allows you to split a cost between multiple payers.
-
-## Todos
+This is a simple Webpage with usefull tools and no annoying ads.
 
 - [ ] deploy with max payment amount!
-- [ ] think about a name for the multiple app page
-- [x] create layout containing sidebar, header and footer
-- [x] position the main content more at the top
+
+## Todos Cost Splitter
+
 - [ ] find out how its possible to use testdata localy but not in the hosted version
-- [ ] look if it is possible to only receive the static side of the selected app
-- [x] Add Box under Settlement Summary
-  - [x] Add a feature to reset all splitting calculations
-  - [x] Add a feature to export the data
-  - [x] Add a feature to import the data
 
 ## Deploy on Vercel
 
