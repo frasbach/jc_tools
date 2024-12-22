@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { TableRowI, Payer } from '@/types/interfaces';
+import { TableRow, Payer } from '@/types/interfaces';
 import { initialTableRows, initialPayers } from '@/lib/static-data-provider';
 import {
   calculateMinimalTransactions,
@@ -8,22 +8,18 @@ import {
 } from '@/lib/transaction-calculation';
 
 interface ExportData {
-  tableRows: TableRowII[];
-  payers: Payer[];
-  defaultCostFactor: number;
-  defaultPayer: number;
-}
-
-interface TableRowII {
-  id: number;
-  costname: string;
-  costamount: number;
-  payedByUserId: number;
-  costfactor: [number, number][];
+  readonly tableRows: Array<
+    Omit<TableRow, 'costfactor'> & {
+      readonly costfactor: [number, number][];
+    }
+  >;
+  readonly payers: Payer[];
+  readonly defaultCostFactor: number;
+  readonly defaultPayer: number;
 }
 
 export const useSplittingTable = () => {
-  const [tableRows, setTableRows] = useState<TableRowI[]>(initialTableRows);
+  const [tableRows, setTableRows] = useState<TableRow[]>(initialTableRows);
   const [payers, setPayers] = useState<Payer[]>(initialPayers);
   const [defaultCostFactor, setDefaultCostFactor] = useState<number>(100);
   const [defaultPayer, setDefaultPayer] = useState<number>(
@@ -82,7 +78,7 @@ export const useSplittingTable = () => {
       payers.map((payer) => [payer.id, defaultCostFactor]),
     );
 
-    const newRow: TableRowI = {
+    const newRow: TableRow = {
       id: newId,
       costname: '',
       costamount: 0,
@@ -219,15 +215,12 @@ export const useSplittingTable = () => {
       const fileContent = await file.text();
       const importedData = JSON.parse(fileContent);
 
-      // Validate the imported data structure
-      if (isCorrectDataStructure(importedData)) {
+      if (!isCorrectDataStructure(importedData)) {
         throw new Error('Invalid JSON structure');
-      } else {
-        importedData as ExportData;
       }
 
       // Convert the costfactor arrays back to Maps
-      const processedRows = importedData.tableRows.map((row: TableRowII) => ({
+      const processedRows: TableRow[] = importedData.tableRows.map((row) => ({
         ...row,
         costfactor: new Map(row.costfactor),
       }));

@@ -1,10 +1,10 @@
-import { TableRowI, Transaction } from '@/types/interfaces';
+import { TableRow, Transaction } from '@/types/interfaces';
 
-export const calculateTotalAmount = (rows: TableRowI[]): number =>
+export const calculateTotalAmount = (rows: TableRow[]): number =>
   rows.reduce((sum, row) => sum + row.costamount, 0);
 
 export const calculatePayerBalance = (
-  rows: TableRowI[],
+  rows: TableRow[],
   payerId: number,
 ): number => {
   return rows.reduce((balance, row) => {

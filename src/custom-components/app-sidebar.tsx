@@ -1,3 +1,4 @@
+import { AppSidebarProps } from '@/types/interfaces';
 import { SidebarGroupType, SidebarItemType } from '@/config/site-config';
 import {
   Sidebar,
@@ -10,16 +11,12 @@ import {
   SidebarMenuItem,
 } from '@/ui-components/sidebar';
 
-interface AppSidebarProps {
-  sidebarGroups: SidebarGroupType[];
-}
-
 export function AppSidebar({ sidebarGroups }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarContent>
-        {sidebarGroups.map((group) => (
-          <SidebarGroup>
+        {sidebarGroups.map((group, index) => (
+          <SidebarGroup key={index}>
             <SidebarGroupLabel>{group.grouptitel}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>

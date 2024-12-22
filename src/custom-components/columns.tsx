@@ -9,14 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui-components/select';
-import { ColumnConfig, ColumnHandlers, TableRowI } from '@/types/interfaces';
+import { ColumnConfig, ColumnHandlers, TableRow } from '@/types/interfaces';
 import { MinusCircleIcon } from 'lucide-react';
 import { Button } from '@/ui-components/button';
 
 export const createColumns = (
   config: ColumnConfig,
   handlers: ColumnHandlers,
-): ColumnDef<TableRowI>[] => [
+): ColumnDef<TableRow>[] => [
   {
     accessorKey: 'costname',
     header: (row) => (
@@ -127,7 +127,7 @@ export const createColumns = (
           </div>
         </div>
       ),
-      cell: ({ row }: { row: Row<TableRowI> }) => (
+      cell: ({ row }: { row: Row<TableRow> }) => (
         <div className="relative flex justify-center">
           <Input
             type="number"

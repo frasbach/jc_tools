@@ -19,19 +19,17 @@ import {
   DataTableProps,
   ColumnHandlers,
   ColumnConfig,
+  TableRow,
 } from '@/types/interfaces';
 
-export function DataTable<TData extends { id: number }>({
+export function DataTable({
   columns,
   data,
   onAddRow,
   onAddPayer,
   handlers,
   config,
-}: DataTableProps<TData> & {
-  handlers: ColumnHandlers;
-  config: ColumnConfig;
-}) {
+}: DataTableProps<TableRow>) {
   const table = useReactTable({
     data,
     columns,

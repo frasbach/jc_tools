@@ -9,19 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui-components/select';
-import { Payer } from '@/types/interfaces';
+import { DefaultSettingsCardProps, Payer } from '@/types/interfaces';
 import { Button } from '@/ui-components/button';
-
-interface DefaultSettingsCardProps {
-  defaultCostFactor: number;
-  defaultPayer: number;
-  payers: Payer[];
-  onDefaultCostFactorChange: (value: number) => void;
-  onDefaultPayerChange: (value: number) => void;
-  onResetTable: () => void;
-  onExportJson: () => void;
-  onImportJson: (file: File) => void;
-}
 
 export function DefaultSettingsCard({
   defaultCostFactor,

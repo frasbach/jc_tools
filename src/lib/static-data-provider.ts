@@ -1,6 +1,6 @@
-import { TableRowI, Payer } from '@/types/interfaces';
+import { TableRow, Payer } from '@/types/interfaces';
 
-export const initialTableRows: TableRowI[] = [
+export const initialTableRows: TableRow[] = [
   {
     id: 1,
     costname: 'Essen',
