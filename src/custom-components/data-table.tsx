@@ -19,7 +19,7 @@ import {
   DataTableProps,
   ColumnHandlers,
   ColumnConfig,
-  TableRow,
+  TableRowI,
 } from '@/types/interfaces';
 
 export function DataTable({
@@ -29,7 +29,7 @@ export function DataTable({
   onAddPayer,
   handlers,
   config,
-}: DataTableProps<TableRow>) {
+}: DataTableProps<TableRowI>) {
   const table = useReactTable({
     data,
     columns,

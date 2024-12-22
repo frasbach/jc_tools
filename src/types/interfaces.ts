@@ -26,7 +26,7 @@ export interface TableRowBase {
   readonly payedByUserId: number;
 }
 
-export interface TableRow extends TableRowBase {
+export interface TableRowI extends TableRowBase {
   readonly costfactor: Map<number, number>;
 }
 
@@ -86,14 +86,14 @@ export interface DataTableProps<TData extends TableRowBase> {
 
 // State Types
 export interface SplittingTableState {
-  readonly tableRows: TableRow[];
+  readonly tableRows: TableRowI[];
   readonly payers: Payer[];
   readonly allRowsHavePayer: boolean;
 }
 
 // Data Transfer Types
 export interface ExportData {
-  readonly tableRows: TableRow[];
+  readonly tableRows: TableRowI[];
   readonly payers: Payer[];
   readonly defaultCostFactor: number;
   readonly defaultPayer: number;
