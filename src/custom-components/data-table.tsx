@@ -1,5 +1,7 @@
 'use client';
 
+import { DataTableProps, TableRowI } from '@/types/interfaces';
+import { Button } from '@/ui-components/button';
 import {
   Table,
   TableBody,
@@ -13,14 +15,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Button } from '@/ui-components/button';
-import { PlusCircleIcon, MinusCircleIcon } from 'lucide-react';
-import {
-  DataTableProps,
-  ColumnHandlers,
-  ColumnConfig,
-  TableRowI,
-} from '@/types/interfaces';
+import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react';
 
 export function DataTable({
   columns,
