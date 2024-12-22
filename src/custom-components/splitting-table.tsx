@@ -60,6 +60,7 @@ export default function SplittingTable() {
           onDefaultPayerChange={handlers.handleDefaultPayerChange}
           onResetTable={handlers.handleResetTable}
           onExportJson={handlers.handleExportJson}
+          onImportJson={handlers.handleImportJson}
         />
       </div>
     </div>

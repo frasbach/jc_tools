@@ -20,6 +20,7 @@ interface DefaultSettingsCardProps {
   onDefaultPayerChange: (value: number) => void;
   onResetTable: () => void;
   onExportJson: () => void;
+  onImportJson: (file: File) => void;
 }
 
 export function DefaultSettingsCard({
@@ -30,7 +31,17 @@ export function DefaultSettingsCard({
   onDefaultPayerChange,
   onResetTable,
   onExportJson,
+  onImportJson,
 }: DefaultSettingsCardProps) {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    const file = event.target.files?.[0];
+    if (file) {
+      onImportJson(file);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -82,6 +93,20 @@ export function DefaultSettingsCard({
         </div>
         <div>
           <Button onClick={onExportJson}>Export as JSON</Button>
+        </div>
+        <div>
+          <Input
+            type="file"
+            accept=".json"
+            onChange={handleFileChange}
+            className="hidden"
+            id="jsonFileInput"
+          />
+          <Button
+            onClick={() => document.getElementById('jsonFileInput')?.click()}
+          >
+            Import JSON
+          </Button>
         </div>
         <div>
           <Button variant="destructive" onClick={onResetTable}>

@@ -191,6 +191,41 @@ export const useSplittingTable = () => {
     URL.revokeObjectURL(url); // Clean up the URL object
   }, [tableRows, payers, defaultCostFactor, defaultPayer]);
 
+  const handleImportJson = async (file: File): Promise<void> => {
+    try {
+      const fileContent = await file.text();
+      const importedData = JSON.parse(fileContent);
+
+      // Validate the imported data structure
+      if (
+        !Array.isArray(importedData.tableRows) ||
+        !Array.isArray(importedData.payers)
+      ) {
+        throw new Error('Invalid JSON structure');
+      }
+
+      // Convert the costfactor arrays back to Maps
+      const processedRows = importedData.tableRows.map((row) => ({
+        ...row,
+        costfactor: new Map(row.costfactor),
+      }));
+
+      // Update the table state
+      setPayers(importedData.payers);
+      setTableRows(processedRows);
+
+      // Update default settings if they exist
+      if (typeof importedData.defaultCostFactor === 'number') {
+        setDefaultCostFactor(importedData.defaultCostFactor);
+      }
+      if (typeof importedData.defaultPayer === 'number') {
+        setDefaultPayer(importedData.defaultPayer);
+      }
+    } catch (err) {
+      console.error('Failed to import JSON:', err);
+    }
+  };
+
   const totalAmount = calculateTotalAmount(tableRows);
   const payerBalances = payers.map((payer) => ({
     id: payer.id,
@@ -227,6 +262,7 @@ export const useSplittingTable = () => {
       handleDefaultPayerChange,
       handleResetTable,
       handleExportJson,
+      handleImportJson,
     },
   };
 };
