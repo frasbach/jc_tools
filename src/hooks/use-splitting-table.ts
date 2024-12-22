@@ -8,16 +8,18 @@ import {
 } from '@/lib/transaction-calculation';
 
 interface ExportData {
-  tableRows: {
-    id: number;
-    costname: string;
-    costamount: number;
-    payedByUserId: number;
-    costfactor: [number, number][]; // Convert Map to array of tuples for JSON
-  }[];
+  tableRows: TableRowII[];
   payers: Payer[];
   defaultCostFactor: number;
   defaultPayer: number;
+}
+
+interface TableRowII {
+  id: number;
+  costname: string;
+  costamount: number;
+  payedByUserId: number;
+  costfactor: [number, number][];
 }
 
 export const useSplittingTable = () => {
@@ -191,21 +193,41 @@ export const useSplittingTable = () => {
     URL.revokeObjectURL(url); // Clean up the URL object
   }, [tableRows, payers, defaultCostFactor, defaultPayer]);
 
+  const isCorrectDataStructure = (data: any): data is ExportData => {
+    return (
+      Array.isArray(data.tableRows) &&
+      data.tableRows.every(
+        (row: any) =>
+          Array.isArray(row.costfactor) &&
+          row.costfactor.every(
+            ([key, value]: [number, number]) =>
+              typeof key === 'number' && typeof value === 'number',
+          ),
+      ) &&
+      Array.isArray(data.payers) &&
+      data.payers.every(
+        (payer: any) =>
+          typeof payer.id === 'number' && typeof payer.name === 'string',
+      ) &&
+      typeof data.defaultCostFactor === 'number' &&
+      typeof data.defaultPayer === 'number'
+    );
+  };
+
   const handleImportJson = async (file: File): Promise<void> => {
     try {
       const fileContent = await file.text();
       const importedData = JSON.parse(fileContent);
 
       // Validate the imported data structure
-      if (
-        !Array.isArray(importedData.tableRows) ||
-        !Array.isArray(importedData.payers)
-      ) {
+      if (isCorrectDataStructure(importedData)) {
         throw new Error('Invalid JSON structure');
+      } else {
+        importedData as ExportData;
       }
 
       // Convert the costfactor arrays back to Maps
-      const processedRows = importedData.tableRows.map((row) => ({
+      const processedRows = importedData.tableRows.map((row: TableRowII) => ({
         ...row,
         costfactor: new Map(row.costfactor),
       }));
