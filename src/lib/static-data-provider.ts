@@ -1,6 +1,42 @@
 import { Payer, TableRowI } from '@/types/interfaces';
 
-export const initialTableRows: TableRowI[] = [
+const getInitialTableRows = (): TableRowI[] => {
+  return process.env.NEXT_PUBLIC_IS_DEVELOPMENT === 'true'
+    ? intialTableRowsDev
+    : initialTableRowsProd;
+};
+
+const getInitialPayers = (): Payer[] => {
+  return process.env.NEXT_PUBLIC_IS_DEVELOPMENT === 'true'
+    ? initialPayersDev
+    : initialPayersProd;
+};
+
+const initialTableRowsProd = [
+  {
+    id: 1,
+    costname: 'Cost_1',
+    costamount: 0,
+    payedByUserId: 1,
+    costfactor: new Map([
+      [1, 100],
+      [2, 100],
+    ]),
+  },
+];
+
+const initialPayersProd = [
+  {
+    id: 1,
+    name: 'You',
+  },
+  {
+    id: 2,
+    name: 'Your Friend',
+  },
+];
+
+const intialTableRowsDev = [
   {
     id: 1,
     costname: 'Essen',
@@ -36,7 +72,7 @@ export const initialTableRows: TableRowI[] = [
   },
 ];
 
-export const initialPayers: Payer[] = [
+export const initialPayersDev: Payer[] = [
   {
     id: 1,
     name: 'Max Mustermann',
@@ -50,3 +86,6 @@ export const initialPayers: Payer[] = [
     name: 'Sebastian Meier',
   },
 ];
+
+export const initialTableRows: TableRowI[] = getInitialTableRows();
+export const initialPayers: Payer[] = getInitialPayers();
