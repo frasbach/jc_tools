@@ -1,4 +1,4 @@
-import { Calculator, Home, LucideProps } from 'lucide-react';
+import { Calculator, LucideProps } from 'lucide-react';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 
 export const siteConfig = {

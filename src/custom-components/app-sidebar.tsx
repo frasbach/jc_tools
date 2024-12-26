@@ -1,5 +1,4 @@
 import { AppSidebarProps } from '@/types/interfaces';
-import { SidebarGroupType, SidebarItemType } from '@/config/site-config';
 import {
   Sidebar,
   SidebarContent,

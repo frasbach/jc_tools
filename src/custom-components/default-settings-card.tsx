@@ -1,7 +1,8 @@
 'use client';
-
-import { Input } from '@/ui-components/input';
+import { DefaultSettingsCardProps } from '@/types/interfaces';
+import { Button } from '@/ui-components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/ui-components/card';
+import { Input } from '@/ui-components/input';
 import {
   Select,
   SelectContent,
@@ -9,8 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui-components/select';
-import { DefaultSettingsCardProps, Payer } from '@/types/interfaces';
-import { Button } from '@/ui-components/button';
+import React from 'react';
 
 export function DefaultSettingsCard({
   defaultCostFactor,

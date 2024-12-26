@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
-import { TableRowI, Payer } from '@/types/interfaces';
-import { initialTableRows, initialPayers } from '@/lib/static-data-provider';
+import { initialPayers, initialTableRows } from '@/lib/static-data-provider';
 import {
   calculateMinimalTransactions,
   calculatePayerBalance,
   calculateTotalAmount,
 } from '@/lib/transaction-calculation';
+import { Payer, TableRowI } from '@/types/interfaces';
+import { useCallback, useState } from 'react';
 
 interface ExportData {
   readonly tableRows: Array<
@@ -189,10 +189,11 @@ export const useSplittingTable = () => {
     URL.revokeObjectURL(url); // Clean up the URL object
   }, [tableRows, payers, defaultCostFactor, defaultPayer]);
 
-  const isCorrectDataStructure = (data: any): data is ExportData => {
+  const isCorrectDataStructure = (data: ExportData): data is ExportData => {
     return (
       Array.isArray(data.tableRows) &&
       data.tableRows.every(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (row: any) =>
           Array.isArray(row.costfactor) &&
           row.costfactor.every(
@@ -202,6 +203,7 @@ export const useSplittingTable = () => {
       ) &&
       Array.isArray(data.payers) &&
       data.payers.every(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (payer: any) =>
           typeof payer.id === 'number' && typeof payer.name === 'string',
       ) &&

@@ -40,11 +40,11 @@ export function calculateMinimalTransactions(
 
   // Find debtors (negative balance) and creditors (positive balance)
   const debtors = Array.from(balances.entries())
-    .filter(([_, balance]) => balance < 0)
+    .filter(([, balance]) => balance < 0)
     .sort((a, b) => a[1] - b[1]); // Largest debt first
 
   const creditors = Array.from(balances.entries())
-    .filter(([_, balance]) => balance > 0)
+    .filter(([, balance]) => balance > 0)
     .sort((a, b) => b[1] - a[1]); // Largest credit first
 
   let debtorIndex = 0;

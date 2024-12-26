@@ -1,11 +1,6 @@
-import { Inter } from 'next/font/google';
-import './globals.css';
+import { sidebarGroupValues } from '@/config/site-config';
 import { ThemeProvider } from '@/context/theme-provider';
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarInset,
-} from '@/ui-components/sidebar';
+import { AppSidebar } from '@/custom-components/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,11 +9,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/ui-components/breadcrumb';
-import { Separator } from '@/ui-components/separator';
-import { AppSidebar } from '@/custom-components/app-sidebar';
-import { sidebarGroupValues } from '@/config/site-config';
-import { ModeSwitcher } from '@/ui-components/mode-switcher';
 import { SiteFooter } from '@/ui-components/footer';
+import { ModeSwitcher } from '@/ui-components/mode-switcher';
+import { Separator } from '@/ui-components/separator';
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from '@/ui-components/sidebar';
+import { Inter } from 'next/font/google';
+import React from 'react';
+import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({

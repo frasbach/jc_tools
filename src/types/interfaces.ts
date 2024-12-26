@@ -1,5 +1,5 @@
-import { ColumnDef } from '@tanstack/react-table';
 import { SidebarGroupType } from '@/config/site-config';
+import { ColumnDef } from '@tanstack/react-table';
 
 // Core Domain Types
 export interface Payer {
@@ -45,11 +45,11 @@ export interface DefaultSettingsCardProps {
   readonly defaultCostFactor: number;
   readonly defaultPayer: number;
   readonly payers: Payer[];
-  readonly onDefaultCostFactorChange: (value: number) => void;
-  readonly onDefaultPayerChange: (value: number) => void;
+  readonly onDefaultCostFactorChange: (_value: number) => void;
+  readonly onDefaultPayerChange: (_value: number) => void;
   readonly onResetTable: () => void;
   readonly onExportJson: () => void;
-  readonly onImportJson: (file: File) => void;
+  readonly onImportJson: (_file: File) => void;
 }
 
 // Table Configuration Types
@@ -61,21 +61,22 @@ export interface ColumnConfig {
 }
 
 export interface ColumnHandlers {
-  readonly handleCostNameChange: (rowId: number, value: string) => void;
-  readonly handleAmountChange: (rowId: number, value: number) => void;
-  readonly handlePayerChange: (rowId: number, value: number) => void;
+  readonly handleCostNameChange: (_rowId: number, _value: string) => void;
+  readonly handleAmountChange: (_rowId: number, _value: number) => void;
+  readonly handlePayerChange: (_rowId: number, _value: number) => void;
   readonly handleCostSplittingChange: (
-    rowId: number,
-    payerId: number,
-    value: number,
+    _rowId: number,
+    _payerId: number,
+    _value: number,
   ) => void;
-  readonly handlePayerNameChange: (payerId: number, value: string) => void;
-  readonly handleDeleteRow: (rowId: number) => void;
-  readonly handleDeletePayer: (payerId: number) => void;
-  readonly handleDefaultCostFactorChange: (value: number) => void;
+  readonly handlePayerNameChange: (_payerId: number, _value: string) => void;
+  readonly handleDeleteRow: (_rowId: number) => void;
+  readonly handleDeletePayer: (_payerId: number) => void;
+  readonly handleDefaultCostFactorChange: (_value: number) => void;
 }
 
 export interface DataTableProps<TData extends TableRowBase> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly columns: ColumnDef<TData, any>[];
   readonly data: TData[];
   readonly onAddRow: () => void;
